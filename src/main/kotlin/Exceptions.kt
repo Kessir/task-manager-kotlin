@@ -1,0 +1,1 @@
+class TaskManagerAtCapacityException(message: String= "Task manager is at capacity") : Exception(message)

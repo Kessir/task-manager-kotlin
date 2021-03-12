@@ -1,0 +1,32 @@
+import org.junit.Test
+
+import org.junit.Assert.*
+import java.util.*
+
+class PriorityTaskManagerTest {
+
+    @Test
+    fun `adding process succeeds when manager is under capacity`() {
+        val taskManager = TaskManager(2, PriorityStrategy())
+        taskManager.addProcess(Process(0, ProcessPriority.LOW))
+
+        assertEquals(1, taskManager.size)
+    }
+
+    @Test
+    fun `new process replaces lowest priority process when task manager is at capacity`() {
+        val taskManager = TaskManager(2, PriorityStrategy())
+
+        val processes = listOf(
+            Process(0, ProcessPriority.LOW),
+            Process(1, ProcessPriority.HIGH),
+            Process(2, ProcessPriority.HIGH),
+            Process(3, ProcessPriority.LOW),
+        )
+
+        processes.forEach { taskManager.addProcess(it) }
+
+
+        assertEquals(listOf(processes[1], processes[2]), taskManager.listProcesses())
+    }
+}
