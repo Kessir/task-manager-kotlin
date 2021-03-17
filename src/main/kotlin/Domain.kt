@@ -10,8 +10,7 @@ enum class SortOptions {
 
 
 data class Process(val pid: Int, val priority: ProcessPriority = ProcessPriority.LOW) {
-    fun kill(){
-    }
+    fun kill(){}
 }
 
 class ProcessData(val process: Process, val createdAt: Date)

@@ -1,6 +1,6 @@
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 
 class DefaultTaskManagerTest {
@@ -13,15 +13,17 @@ class DefaultTaskManagerTest {
         assertEquals(1, taskManager.size)
     }
 
-    @Test(expected = TaskManagerAtCapacityException::class)
+    @Test
     fun `adding process fails when task manager is at capacity`() {
         val MAX_CAPACITY = 2
         val taskManager = TaskManager(MAX_CAPACITY)
 
         taskManager.addProcess(Process(0, ProcessPriority.LOW))
         taskManager.addProcess(Process(1, ProcessPriority.LOW))
-        taskManager.addProcess(Process(2, ProcessPriority.LOW))
-        taskManager.addProcess(Process(2, ProcessPriority.LOW))
+
+        assertThrows<TaskManagerAtCapacityException> {
+            taskManager.addProcess(Process(2, ProcessPriority.LOW))
+        }
 
         assertEquals(MAX_CAPACITY, taskManager.size)
     }
@@ -53,10 +55,9 @@ class DefaultTaskManagerTest {
 
         val result = taskManager.listProcesses(sortBy = SortOptions.PRIORITY)
 
-        assertEquals(1, result[0].pid)
-        assertEquals(2, result[1].pid)
-        assertEquals(3, result[2].pid)
-        assertEquals(0, result[3].pid)
+        val pids = result.map { it.pid }
+
+        assertEquals(listOf(1, 2, 3, 0), pids)
     }
 
     @Test

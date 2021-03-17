@@ -1,30 +1,29 @@
 import java.util.*
 
 
-class TaskManager(override val maxCapacity: Int, private val strategy: Strategy? = null) :
+class TaskManager(override val maxCapacity: Int, private val strategy: Strategy = DefaultStrategy) :
     ITaskManager {
 
     private val processes = HashMap<Int, ProcessData>()
 
     override fun addProcess(process: Process, createdAt: Date) {
         if (processes.size == maxCapacity) {
-            addAtCapacity(process, createdAt, strategy)
+            addAtCapacity(process, createdAt)
         } else {
             processes[process.pid] = ProcessData(process, createdAt)
         }
     }
 
-    private fun addAtCapacity(process: Process, createdAt: Date, strategy: Strategy?) {
-        if (strategy == null) {
-            throw TaskManagerAtCapacityException()
-        } else {
-            val toBeReplaced = strategy.findProcessToKill(processes.values, process)
+    private fun addAtCapacity(process: Process, createdAt: Date) {
+        val toBeReplaced = strategy.findProcessToKill(processes.values, process)
 
-            if (toBeReplaced != null) {
-                killProcess(toBeReplaced)
-                processes[process.pid] = ProcessData(process, createdAt)
-            }
+        if (toBeReplaced != null) {
+            killProcess(toBeReplaced)
+            processes[process.pid] = ProcessData(process, createdAt)
+        } else {
+            throw TaskManagerAtCapacityException()
         }
+
     }
 
     private fun findByPriority(priority: ProcessPriority): List<Int> {
@@ -44,7 +43,7 @@ class TaskManager(override val maxCapacity: Int, private val strategy: Strategy?
     }
 
     override fun killProcesses() {
-        val processIds =  processes.keys.toList()
+        val processIds = processes.keys.toList()
         processIds.forEach { killProcess(it) }
     }
 

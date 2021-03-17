@@ -1,13 +1,11 @@
-import org.junit.Test
-
-import org.junit.Assert.*
-import java.util.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class FifoTaskManagerTest {
 
     @Test
     fun `adding process succeeds when manager is under capacity`() {
-        val taskManager = TaskManager(3, FifoStrategy())
+        val taskManager = TaskManager(3, FifoStrategy)
         taskManager.addProcess(Process(0, ProcessPriority.LOW))
 
         assertEquals(1, taskManager.size)
@@ -15,7 +13,7 @@ class FifoTaskManagerTest {
 
     @Test
     fun `new process replaces oldest when task manager is at capacity`() {
-        val taskManager = TaskManager(2, FifoStrategy())
+        val taskManager = TaskManager(2, FifoStrategy)
 
         val processes = listOf<Process>(
             Process(0, ProcessPriority.LOW),
