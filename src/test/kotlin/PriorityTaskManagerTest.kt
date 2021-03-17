@@ -27,7 +27,7 @@ class PriorityTaskManagerTest {
         taskManager.addProcess(processes[1])
         taskManager.addProcess(processes[2])
 
-        assertThrows<TaskManagerAtCapacityException> {
+        assertThrows<ProcessAdditionException> {
             taskManager.addProcess(processes[3])
         }
 

@@ -1,1 +1,1 @@
-class TaskManagerAtCapacityException(message: String= "Task manager is at capacity") : Exception(message)
+class ProcessAdditionException(message: String= "Process cannot be added to tak manager") : Exception(message)

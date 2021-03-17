@@ -21,7 +21,7 @@ class TaskManager(override val maxCapacity: Int, private val strategy: Strategy 
             killProcess(toBeReplaced)
             processes[process.pid] = ProcessData(process, createdAt)
         } else {
-            throw TaskManagerAtCapacityException()
+            throw ProcessAdditionException()
         }
 
     }

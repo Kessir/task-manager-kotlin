@@ -21,7 +21,7 @@ class DefaultTaskManagerTest {
         taskManager.addProcess(Process(0, ProcessPriority.LOW))
         taskManager.addProcess(Process(1, ProcessPriority.LOW))
 
-        assertThrows<TaskManagerAtCapacityException> {
+        assertThrows<ProcessAdditionException> {
             taskManager.addProcess(Process(2, ProcessPriority.LOW))
         }
 
